@@ -1,0 +1,91 @@
+<?xml version = "1.0"?>
+<!--  
+    You can confirm your manipulator on "rviz" to put down this cord.
+    roslaunch urdf_tutorial display.launch model:=manipulator.urdf.xacro
+-->
+<robot name = "manipulator" xmlns:xacro = "http://ros.org/wiki/xacro">
+    <!-- Manipulator macro -->
+    <xacro:macro name = "manipulator"
+        params = "parent end_effector_link link_colour_1 link_colour_2 *origin">
+
+        <!-- base -->
+        <xacro:property name = "PI" value = "3.14159"/>
+        <xacro:property name = "BASE_X" value = "0.30"/>
+        <xacro:property name = "BASE_Y" value = "0.30"/>
+        <xacro:property name = "BASE_Z" value = "0.09"/>
+        <link name = "base_link">
+            <visual>
+                <geometry>
+                    <box size = "${BASE_X} ${BASE_Y} ${BASE_Z}"/>
+                </geometry>
+                <origin xyz = "0 0 ${BASE_Z/2}" rpy = "0 0 0"/>
+                <material name = "${link_colour_1}"/>
+            </visual>
+            <collision>
+                <geometry>
+                    <box size = "${BASE_X} ${BASE_Y} ${BASE_Z}"/>
+                </geometry>
+                <origin xyz = "0 0 ${BASE_Z/2}" rpy = "0 0 0"/>
+            </collision>
+            <inertial>
+                <mass value = "0.1"/>
+                <inertia ixx = "1e-3" ixy = "0" ixz = "0" iyy = "1e-3" iyz = "0" izz = "1e-3"/>
+            </inertial>
+        </link>
+        <joint name = "base_joint" type = "fixed">
+            <!-- we defined "parent" as paramater of macro  -->
+            <parent link = "${parent}"/>
+            <child link = "base_link"/>
+            <xacro:insert_block name = "origin"/>
+        </joint>
+
+        <!-- shoulder -->
+        <xacro:property name = "SHOULDER_X" value = "0.25"/>
+        <xacro:property name = "SHOULDER_Y" value = "0.20"/>
+        <xacro:property name = "SHOULDER_Z" value = "0.15"/>
+        <link name = "shoulder_link">
+            <visual>
+                <geometry>
+                    <box size = "${SHOULDER_X} ${SHOULDER_Y} 0.025"/>
+                </geometry>
+                <origin xyz = "0 0 0.0175" rpy = "0 0 0"/>
+                <material name = "${link_colour_2}"/>
+            </visual>
+            <visual>
+                <geometry>
+                    <box size = "${SHOULDER_X} 0.025 ${SHOULDER_Z - 0.025}"/>
+                </geometry>
+                <origin xyz = "0 ${SHOULDER_Y/2 - 0.0125} ${0.025 + 0.005 + (SHOULDER_Z - 0.025)/2}" rpy = "0 0 0"/>
+                <material name = "${link_colour_2}"/>
+            </visual>
+            <visual>
+                <geometry>
+                    <box size = "${SHOULDER_X} 0.025 ${SHOULDER_Z - 0.025}"/>
+                </geometry>
+                <origin xyz = "0 ${-(SHOULDER_Y/2) + 0.0125} ${0.025  + 0.005 + (SHOULDER_Z - 0.025)/2}" rpy = "0 0 0"/>
+                <material name = "${link_colour_2}"/>
+            </visual>
+            <!-- adopt simple box -->
+            <collision>
+                <geometry>
+                    <box size = "${SHOULDER_X} ${SHOULDER_Y} ${SHOULDER_Z}"/>
+                </geometry>
+                <origin xyz = "0 0 ${SHOULDER_Z/2}" rpy =  "0 0 0"/>
+            </collision>
+            <inertial>
+                <mass value = "0.025"/>
+                <inertia ixx = "1e-3" ixy = "0" ixz = "0" iyy = "1e-3" iyz = "0" izz = "1e-3"/>
+            </inertial>
+        </link>
+        <!-- type "revolute" has diffference that the rotation argument is restricted --> 
+        <joint name = "shoulder_rotate_joint" type = "revolute">
+            <axis xyz = "0 0 1"/>
+            <parent link = "base_link"/>
+            <child link = "shoulder_link"/>
+            <!-- "link" part's position base is "origin xyz" -->
+            <origin xyz = "0 0 ${BASE_Z}" rpy = "0 0 0"/>
+            <limit lower = "-${PI}" upper = "${PI}" effort = "30" velocity = "${PI}"/>
+        </joint>
+    </xacro:macro>
+
+</robot>
