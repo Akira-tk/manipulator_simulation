@@ -1,7 +1,7 @@
 <?xml version = "1.0"?>
 <!--  
     You can confirm your manipulator on "rviz" to put down this cord.
-    roslaunch urdf_tutorial display.launch model:=manipulator.urdf.xacro
+    roslaunch urdf_tutorial display.launch model:=urdf/manipulator.urdf.xacro
 -->
 <robot name = "manipulator" xmlns:xacro = "http://ros.org/wiki/xacro">
     <!-- Manipulator macro -->
