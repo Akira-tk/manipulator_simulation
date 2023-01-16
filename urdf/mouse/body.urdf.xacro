@@ -1,0 +1,85 @@
+<?xml version = "1.0"?>
+<robot name = "mouse" xmlns:xacro = "http://ros.org/wiki/xacro">
+    <xacro:macro name = "mouse" params = "parent end_effector_link colour1 colour2 *origin">
+
+        <xacro:property name = "PI"         value = "3.1415926535897931"/>
+        <xacro:property name = "b_m"        value = "1.80"/>
+        <xacro:property name = "b_m2"       value = "${b_m/12}"/>
+        <xacro:property name = "b_y"        value = "0.08"/>
+        <xacro:property name = "b_x"        value = "0.12"/>
+        <xacro:property name = "b_z"        value = "0.06"/>
+        <xacro:property name = "cyl_h"      value = "0.015"/>
+        <xacro:property name = "cyl_r"      value = "0.002"/>
+        <xacro:property name = "cyl_gap_x"  value = "0.02"/>
+        <xacro:property name = "cyl_gap_y"  value = "0.04"/>
+
+        <link name = "base_link">        
+            <!-- deployment settings -->
+                <!-- boxes -->
+            <visual>
+                <geometry>
+                    <box size = "${b_y} ${b_x} ${b_z}"/>
+                </geometry>
+                <material name = "${colour2}"/>
+            </visual>
+            <visual>
+                <geometry>
+                    <box size = "${b_y} ${b_x} ${b_z/30}"/>
+                </geometry>
+                <origin xyz = "0 0 ${b_z /1.5}" rpy = "0 0 0"/>
+                <material name = "${colour2}"/>
+            </visual>
+                <!-- cylinders -->
+            <visual>
+                <geometry>
+                    <cylinder radius = "${cyl_r}" length = "${cyl_h}"/>
+                </geometry>
+                <origin xyz = "${cyl_gap_x} ${cyl_gap_y} ${b_z /2 + cyl_h/2}" rpy = "0 0 0"/>
+                <material name = "${colour1}"/>
+            </visual>
+            <visual>
+                <geometry>
+                    <cylinder radius = "${cyl_r}" length = "${cyl_h}"/>
+                </geometry>
+                <origin xyz = "${-cyl_gap_x} ${cyl_gap_y} ${b_z /2 + cyl_h/2}" rpy = "0 0 0"/>
+                <material name = "${colour1}"/>
+            </visual>
+            <visual>
+                <geometry>
+                    <cylinder radius = "${cyl_r}" length = "${cyl_h}"/>
+                </geometry>
+                <origin xyz = "${cyl_gap_x} ${-cyl_gap_y} ${b_z /2 + cyl_h/2}" rpy = "0 0 0"/>
+                <material name = "${colour1}"/>
+            </visual>
+            <visual>
+                <geometry>
+                    <cylinder radius = "${cyl_r}" length = "${cyl_h}"/>
+                </geometry>
+                <origin xyz = "${-cyl_gap_x} ${-cyl_gap_y} ${b_z /2 + cyl_h/2}" rpy = "0 0 0"/>
+                <material name = "${colour1}"/>
+            </visual>
+
+            <collision>
+                <geometry>
+                    <box size = "${b_y} ${b_x} ${b_z}"/>
+                </geometry>
+            </collision>
+
+            <inertial>
+                <origin xyz = "0 0 0" rpy = "0 0 0"/>
+                <mass value = "${b_m}"/>
+                <inertia    ixx = "${b_m2*(b_x*b_x+b_z*b_z)}"   ixy = "0"                           ixz = "0"
+                            iyx = "0"                           iyy = "${b_m2*(b_y*b_y+b_z*b_z)}"   iyz = "0"
+                            izx = "0"                           izy = "0"                           izz = "${b_m2*(b_y*b_y+b_x*b_x)}"/>
+            </inertial>
+        </link>
+
+        <joint name = "base_joint" type = "fixed">
+            <parent link = "${parent}"/>
+            <child link = "base_link"/>
+            <origin xyz = "0 0 ${b_z /2}" rpy = "0 0 0"/>   <!-- origin position of robot -->
+            <xacro:insert_block name = "origin"/>
+        </joint>
+    </xacro:macro>
+
+</robot>

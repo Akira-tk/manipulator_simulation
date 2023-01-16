@@ -1,0 +1,56 @@
+<?xml version = "1.0"?>
+<robot name = "MouseRobot" xmlns:xacro = "http://ros.org/wiki/xacro">
+<!--    You can confirm your manipulator on "rviz" to put down this cord.
+        roslaunch urdf_tutorial display.launch model:=urdf/mouse/mouse_robot.urdf.xacro -->
+
+    <xacro:include filename = "$(find manipulator_simulation)/urdf/mouse/body.urdf.xacro"/>
+    <xacro:include filename = "$(find manipulator_simulation)/urdf/mouse/wheel.urdf.xacro"/>
+    <xacro:include filename = "$(find manipulator_simulation)/urdf/mouse/light_sensor.urdf.xacro"/>
+    <xacro:include filename = "$(find manipulator_simulation)/urdf/mouse/camera.urdf.xacro"/>
+    <!-- colour definition -->
+    <material name = "black">
+        <color rgba = "0.2 0.2 0.2 1.0"/>
+    </material>
+    <material name = "grey">
+        <color rgba = "0.75 0.75 0.75 1.0"/>
+    </material>
+    <material name = "red">
+        <color rgba = "1.0 0 0 2.0"/>
+    </material>
+    <material name = "blue">
+        <color rgba = "0 0 1.0 2.0"/>
+    </material>
+    <material name = "green">
+        <color rgba = "0 1.0 0 2.0"/>
+    </material>
+
+    <!-- define empty link to fasten manipulator -->
+    <link name = "world"/>
+
+    <xacro:property name = "end_effector_base_link" value = "wrist_base_link"/>
+
+    <xacro:mouse parent = "world" end_effector_link = "${end_effector_base_link}" colour1 = "black" colour2 = "grey">
+        <origin xyz = "0 0 0" rpy = "0 0 0"/>
+    </xacro:mouse>
+    
+    <xacro:wheel rl = "r" parent = "base_link"/>
+    <xacro:wheel rl = "l" parent = "base_link"/>
+
+    <!-- xyz is relative distances from base_link-->
+    <xacro:gazebo_light_sensor name = "front" parent = "base_link" xyz = "0 0.06 0.03" direction = "0"/>
+
+    <gazebo>
+        <plugin name = "differential_drive_controller" filename = "libgazebo_ros_diff_drive.so">
+            <leftJoint>wheel_l_joint</leftJoint>
+            <rightJoint>wheel_r_joint</rightJoint>
+            <robotBaseFrame>base_link</robotBaseFrame>
+            <wheelSeparation>0.08</wheelSeparation>
+            <wheelDiameter>0.048</wheelDiameter>
+            <publishWheelJointState>true</publishWheelJointState>
+            <legacyMode>false</legacyMode>
+            <odometryTopic>odometry</odometryTopic>
+            <odometryFrame>odometry</odometryFrame>
+        </plugin>
+    </gazebo>
+
+</robot>

@@ -1,7 +1,7 @@
 <?xml version = "1.0"?>
 <!--  
     You can confirm your manipulator on "rviz" to put down this cord.
-    roslaunch urdf_tutorial display.launch model:=urdf/manipulator.urdf.xacro
+    roslaunch urdf_tutorial display.launch model:=urdf/manipulator/manipulator.urdf.xacro
 -->
 <robot name = "manipulator" xmlns:xacro = "http://ros.org/wiki/xacro">
     <!-- Manipulator macro -->
@@ -9,7 +9,7 @@
         params = "parent end_effector_link link_colour_1 link_colour_2 *origin">
 
         <!-- base -->
-        <xacro:property name = "PI" value = "3.14159"/>
+        <xacro:property name = "PI"     value = "3.14159"/>
         <xacro:property name = "BASE_X" value = "0.30"/>
         <xacro:property name = "BASE_Y" value = "0.30"/>
         <xacro:property name = "BASE_Z" value = "0.09"/>

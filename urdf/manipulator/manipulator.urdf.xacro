@@ -2,12 +2,12 @@
 <robot name = "SingleArmManipulator" xmlns:xacro = "http://ros.org/wiki/xacro">
 <!--  
     You can confirm your manipulator on "rviz" to put down this cord.
-    roslaunch urdf_tutorial display.launch model:=manipulator.urdf.xacro
+    roslaunch urdf_tutorial display.launch model:=urdf/manipulator/manipulator.urdf.xacro
 -->
 
-    <xacro:include filename="$(find manipulator_simulation)/urdf/manipulator_parts.xacro"/>
-    <!-- xacro:include filename="$(find manipulator_simulation)/urdf/camera.xacro"/-->
-    <xacro:include filename="$(find manipulator_simulation)/urdf/hand_parts.xacro"/>
+    <xacro:include filename="$(find manipulator_simulation)/urdf/manipulator/manipulator_parts.xacro"/>
+    <!-- xacro:include filename="$(find manipulator_simulation)/urdf/manipulator/camera.xacro"/-->
+    <xacro:include filename="$(find manipulator_simulation)/urdf/manipulator/hand_parts.xacro"/>
 
     <!-- define colors -->
     <material name = "black">
@@ -22,13 +22,13 @@
 
     <xacro:property name = "end_effector_base_link" value = "wrist_base_link"/>
 
-    <xacro:manipulator parent = "world" end_effector_link = "${end_effector_base_link}"
-        link_colour_1 = "black" link_colour_2 = "grey">
+    <xacro:manipulator  parent = "world"        end_effector_link = "${end_effector_base_link}"
+                        link_colour_1 = "black" link_colour_2 = "grey">
         <!-- define position where we want to set manupulator in the original point of link "world" -->
         <origin xyz = "0 0 0" rpy = "0 0 0"/>
     </xacro:manipulator>
 
-    <xacro:gripper base_link_name = "${end_effector_base_link}"
-        base_colour = "black" finger_colour = "grey"/>
+    <xacro:gripper  base_link_name = "${end_effector_base_link}"
+                    base_colour = "black" finger_colour = "grey"/>
 
 </robot>
